@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/TrabalhoLP2/';
+$config['base_url'] = 'http://localhost/FinalLp22/';
 
 /*
 |--------------------------------------------------------------------------
@@ -186,6 +186,8 @@ $config['enable_query_strings'] = FALSE;
 $config['controller_trigger'] = 'c';
 $config['function_trigger'] = 'm';
 $config['directory_trigger'] = 'd';
+
+
 
 /*
 |--------------------------------------------------------------------------
