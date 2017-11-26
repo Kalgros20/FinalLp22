@@ -13,14 +13,22 @@
                 {
                     //Get uploaded file information
                     $upload_data = $this->upload->data();
-                    $fileName = $upload_data['file_name'];
+                    $img = new Imagem();
                     
+                    $descricao = $this->input->post('descricao');
+                    
+                    // var_dump($descricao);
+                    
+                    $img->insereMetadados($upload_data,$descricao);
+
+                    $fileName = $upload_data['file_name'];
+                
+                        
                     //File path at local server
                     $source = 'assets/'.$fileName;
                     
-                    // var_dump($source);
                     $destination = 'uploads/'.$fileName;
-                    // var_dump($destination);
+                    
                     //Upload file to the remote server
                     $this->ftp->upload($source, $destination, 'auto');
                                         
@@ -28,21 +36,37 @@
             }
         }
 
+        public function deletaImage($id)
+        {
+            $img = new Imagem();
+            $fileName = $img->deletaImagem($id);  
+            // var_dump($fileName);
 
-        public function deletaImage($fileName){
-             $this->ftp->delete_file('./'.$fileName);
+            $this->ftp->delete_file("/uploads/$fileName");
+            return true;        
         }
 
-        public function alteraImage(){
+        public function atualizaImage($id)
+        {
+
+           if(sizeof($_POST) == 0) return false;
+            
+            $data['nome'] = $this->input->post('nome');
+            $data['descricao'] = $this->input->post('descricao');
+            $newFile =  $this->input->post('nome');
+            
+            $img = new Imagem();
+            $fileName = $img->atualizaImagem($data,$id);  
+            
+            $this->ftp->rename("/uploads/$fileName", "/uploads/$newFile");
+            
             
         }
-        public function listaImage(){
+
+        public function listaImage()
+        {
             $img = new Imagem();
-
-            $list = $this->ftp->list_files('uploads');
-            var_dump($list);
-
-            return $img->listaImagem($list);
+            return $img->getLista();
         }
 
     }

@@ -3,13 +3,16 @@
 class Upload extends CI_Controller {
 
         public function index()
-        {
+        { 
+                $this->load->view('static/cabecalho');
+                $this->load->view('static/header');
                 $this->ftp->connect();
-                $data['action'] = 'insere';
+                $data['action'] = 'index.php/Upload/insere';
                 $this->load->model('Home/HomeModel','model');
-                $this->model->listaImage();
+                $data['lista'] = $this->model->listaImage();
                 $this->load->view('form/form',$data);
                 $this->ftp->close();
+                $this->load->view('static/scripts');
         }
 
         public function insere()
@@ -17,21 +20,33 @@ class Upload extends CI_Controller {
                 $this->ftp->connect();
                 $this->load->model('Home/HomeModel','model');
                 $this->model->insereImage();
-                redirect('Upload/Index','refresh');
+                redirect('Upload','refresh');
                 $this->ftp->close();
         }
 
-        public function remove()
+        public function deletar($id = 0)
         {
                 $this->ftp->connect();
                 $this->load->model('Home/HomeModel','model');
-                $this->model->deletaImage();
+                $this->model->deletaImage($id);
                 $this->ftp->close();
+                redirect('upload');
+                
         }
 
-        public function edita()
-        {
+        public function editar($id = 0){
+                $this->load->view('static/cabecalho');
+                $this->load->view('static/header');
+             
                 $this->ftp->connect();
+                $this->load->model('Home/HomeModel', 'model');
+                $this->model->atualizaImage($id);
+
+                
+                $data['id'] = $id;
+                $data['action'] = "/index.php/Upload/editar/$id";
+                $this->load->view('form/formEditar', $data);
+                $this->load->view('static/scripts');
                 $this->ftp->close();
         }
 }
